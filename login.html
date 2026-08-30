@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - FinszMoney</title>
+    <title>Login - LexFinszMoney</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -34,7 +34,7 @@
                 F
             </div>
             <h1 class="text-2xl font-bold tracking-tight">Selamat Datang Kembali</h1>
-            <p class="text-sm text-slate-500">Masuk ke akun FinszMoney Anda</p>
+            <p class="text-sm text-slate-500">Masuk ke akun LexFinszMoney Anda</p>
         </div>
 
         <!-- Form -->
@@ -69,24 +69,29 @@
     </div>
 
     <!-- Script -->
+    <script type="module" src="js/supabaseSync.js"></script>
     <script src="js/auth.js"></script>
     <script>
         // Middleware: Redirect jika sudah login
         Auth.requireGuest();
 
-        document.getElementById('login-form').addEventListener('submit', function(e) {
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('error-message');
+            
+            const btn = this.querySelector('button[type="submit"]');
+            btn.textContent = 'Memuat...';
 
-            const result = Auth.login(email, password);
+            const result = await Auth.login(email, password);
 
             if (result.success) {
                 window.location.href = 'index.html';
             } else {
                 errorDiv.textContent = result.message;
                 errorDiv.classList.remove('hidden');
+                btn.textContent = 'Masuk';
             }
         });
     </script>

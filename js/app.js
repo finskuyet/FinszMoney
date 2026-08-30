@@ -28,6 +28,11 @@ const App = {
 
         // Listen for hash changes in URL
         window.addEventListener('hashchange', () => this.handleHashChange());
+        
+        // Listen for online/offline status
+        window.addEventListener('online', () => this.updateConnectionStatus());
+        window.addEventListener('offline', () => this.updateConnectionStatus());
+        this.updateConnectionStatus();
     },
 
     updateUserProfile(user) {
@@ -39,9 +44,32 @@ const App = {
         }
     },
 
+    updateConnectionStatus() {
+        const el = document.getElementById('connection-status');
+        if (!el) return;
+        
+        const device = (() => {
+            const ua = navigator.userAgent;
+            if (/Windows/i.test(ua)) return 'Windows';
+            if (/Mac/i.test(ua)) return 'Mac';
+            if (/Android/i.test(ua)) return 'Android';
+            if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+            if (/Linux/i.test(ua)) return 'Linux';
+            return 'Perangkat';
+        })();
+        
+        if (navigator.onLine) {
+            el.textContent = `Online - ${device}`;
+            el.className = 'text-[10px] text-emerald-600 dark:text-emerald-400 font-medium';
+        } else {
+            el.textContent = `Offline - ${device}`;
+            el.className = 'text-[10px] text-rose-500 font-medium';
+        }
+    },
+
     handleHashChange() {
         const hash = window.location.hash.replace('#', '');
-        const validTabs = ['dashboard', 'transactions', 'reports', 'categories', 'goals', 'accounts', 'bills', 'settings', 'ai'];
+        const validTabs = ['dashboard', 'transactions', 'reports', 'categories', 'goals', 'accounts', 'bills', 'settings', 'ai', 'guide'];
         if (validTabs.includes(hash)) {
             this.switchTab(hash, false);
         } else {
@@ -79,7 +107,11 @@ const App = {
     switchTab(tabId, updateHash = true) {
         this.currentTab = tabId;
         if (updateHash) {
-            window.location.hash = tabId;
+            if (tabId === 'ai') {
+                history.replaceState(null, null, window.location.pathname);
+            } else {
+                window.location.hash = tabId;
+            }
         }
 
         // 1. Update Desktop Sidebar nav item active states
@@ -139,6 +171,11 @@ const App = {
 
         // 7. Render data for current view
         this.renderCurrentView();
+
+        // 8. Auto-start guide if applicable
+        if (typeof Guide !== 'undefined') {
+            Guide.checkAutoStart(tabId);
+        }
     },
 
     renderCurrentView() {
@@ -791,9 +828,9 @@ const App = {
         // Transaction Account Dropdown
         const elAccountSelect = document.getElementById('tx-account');
         if (elAccountSelect) {
-            elAccountSelect.innerHTML = accounts.map(acc => `
-                <option value="${acc.id}">${acc.name} (${Utils.formatRupiah(acc.calculatedBalance || 0)})</option>
-            `).join('');
+            elAccountSelect.innerHTML = accounts.length > 0 
+                ? accounts.map(acc => `<option value="${acc.id}">${acc.name} (${Utils.formatRupiah(acc.calculatedBalance || 0)})</option>`).join('')
+                : `<option value="" disabled selected>-- Tambah Rekening Dulu --</option>`;
         }
 
         // Filter Category Dropdown in Table
@@ -808,25 +845,25 @@ const App = {
         // Bill Category Dropdown
         const elBillCategory = document.getElementById('bill-category');
         if (elBillCategory) {
-            elBillCategory.innerHTML = categories.map(c => `
-                <option value="${c.id}">${c.name}</option>
-            `).join('');
+            elBillCategory.innerHTML = categories.length > 0 
+                ? categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+                : `<option value="" disabled selected>-- Tambah Kategori Dulu --</option>`;
         }
 
         // Bill Account Dropdown
         const elBillAccount = document.getElementById('bill-account');
         if (elBillAccount) {
-            elBillAccount.innerHTML = accounts.map(acc => `
-                <option value="${acc.id}">${acc.name}</option>
-            `).join('');
+            elBillAccount.innerHTML = accounts.length > 0 
+                ? accounts.map(acc => `<option value="${acc.id}">${acc.name}</option>`).join('')
+                : `<option value="" disabled selected>-- Tambah Rekening Dulu --</option>`;
         }
 
         // Deposit Goal Account Dropdown
         const elDepositAcc = document.getElementById('goal-deposit-account');
         if (elDepositAcc) {
-            elDepositAcc.innerHTML = accounts.map(acc => `
-                <option value="${acc.id}">${acc.name} (${Utils.formatRupiah(acc.calculatedBalance || 0)})</option>
-            `).join('');
+            elDepositAcc.innerHTML = accounts.length > 0 
+                ? accounts.map(acc => `<option value="${acc.id}">${acc.name} (${Utils.formatRupiah(acc.calculatedBalance || 0)})</option>`).join('')
+                : `<option value="" disabled selected>-- Tambah Rekening Dulu --</option>`;
         }
     },
 
@@ -834,9 +871,9 @@ const App = {
         const categories = DataStore.getCategories(type);
         const elCategorySelect = document.getElementById('tx-category');
         if (elCategorySelect) {
-            elCategorySelect.innerHTML = categories.map(c => `
-                <option value="${c.id}">${c.name}</option>
-            `).join('');
+            elCategorySelect.innerHTML = categories.length > 0 
+                ? categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+                : `<option value="" disabled selected>-- Tambah Kategori Dulu --</option>`;
         }
     },
 

@@ -26,7 +26,18 @@ const Auth = {
         }
     },
 
-    login(email, password) {
+    async login(email, password) {
+        if (window.SupabaseSync && window.SupabaseSync.supabase) {
+            const res = await window.SupabaseSync.login(email, password);
+            if (res.success) {
+                const sessionUser = { id: res.data.user.id, name: res.data.user.user_metadata?.full_name || 'User', email: res.data.user.email };
+                localStorage.setItem(AUTH_KEYS.CURRENT_USER, JSON.stringify(sessionUser));
+                return { success: true, user: sessionUser };
+            }
+            return res;
+        }
+
+        // Fallback LocalStorage
         const users = this.getUsers();
         const user = users.find(u => u.email === email && u.password === password);
         
@@ -38,7 +49,20 @@ const Auth = {
         return { success: false, message: 'Email atau password salah!' };
     },
 
-    register(name, email, password) {
+    async register(name, email, password) {
+        if (window.SupabaseSync && window.SupabaseSync.supabase) {
+            const res = await window.SupabaseSync.register(email, password, name);
+            if (res.success) {
+                const newUser = { id: res.data.user.id, name: name.trim(), email: email.trim(), password: password };
+                const users = this.getUsers();
+                users.push(newUser);
+                this.saveUsers(users);
+                return { success: true, user: newUser };
+            }
+            return res;
+        }
+
+        // Fallback LocalStorage
         const users = this.getUsers();
         
         // Cek apakah email sudah terdaftar
@@ -50,7 +74,7 @@ const Auth = {
             id: 'usr_' + Date.now(),
             name: name.trim(),
             email: email.trim(),
-            password: password // Dalam produksi nyata, password harus di-hash (bcrypt)
+            password: password
         };
 
         users.push(newUser);
@@ -88,7 +112,14 @@ const Auth = {
     },
 
     logout() {
+        // Clear all FinszMoney data from localStorage upon logout
         localStorage.removeItem(AUTH_KEYS.CURRENT_USER);
+        localStorage.removeItem('finszmoney_transactions_v1');
+        localStorage.removeItem('finszmoney_categories_v1');
+        localStorage.removeItem('finszmoney_accounts_v1');
+        localStorage.removeItem('finszmoney_goals_v1');
+        localStorage.removeItem('finszmoney_bills_v1');
+        
         window.location.href = 'login.html';
     },
 

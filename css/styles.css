@@ -162,3 +162,121 @@ body {
     width: 100%;
     min-height: 240px;
 }
+
+/* ===================================================================== */
+/* Custom Driver.js Aesthetic Styles (Matches App Theme)                 */
+/* ===================================================================== */
+
+.driver-popover {
+    border-radius: 16px !important;
+    padding: 24px 24px 20px 24px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    font-family: 'Inter', sans-serif !important;
+    max-width: 340px !important;
+}
+
+.dark .driver-popover {
+    box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.5), 0 15px 15px -5px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid #334155 !important;
+}
+
+.driver-popover-title {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 8px !important;
+    line-height: 1.3 !important;
+}
+
+.driver-popover-description {
+    font-size: 0.875rem !important;
+    color: var(--text-secondary) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 24px !important;
+}
+
+.driver-popover-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-top: 0 !important;
+}
+
+.driver-popover-progress-text {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    color: var(--text-secondary) !important;
+    opacity: 0.8 !important;
+    letter-spacing: 0.05em !important;
+}
+
+.driver-popover-navigation-btns {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+.driver-popover-prev-btn {
+    background-color: var(--bg-main) !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.driver-popover-prev-btn:hover {
+    background-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.driver-popover-next-btn,
+.driver-popover-done-btn {
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 8px 18px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.driver-popover-next-btn:hover,
+.driver-popover-done-btn:hover {
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.3), 0 4px 6px -1px rgba(37, 99, 235, 0.2) !important;
+}
+
+.driver-popover-close-btn {
+    color: var(--text-secondary) !important;
+    top: 14px !important;
+    right: 14px !important;
+    font-size: 1.5rem !important;
+    transition: color 0.2s ease, transform 0.2s ease !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.driver-popover-close-btn:hover {
+    color: var(--text-primary) !important;
+    transform: rotate(90deg) !important;
+}
+
+/* Update Driver.js v1 specific popover arrow color using CSS variables */
+:root {
+    --driver-popover-bg: var(--card-bg);
+}
+
+.dark {
+    --driver-popover-bg: #1e293b;
+}

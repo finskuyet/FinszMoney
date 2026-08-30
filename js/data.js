@@ -13,236 +13,23 @@ const STORAGE_KEYS = {
 };
 
 // Default pre-seeded categories
-const DEFAULT_CATEGORIES = [
-    // Pengeluaran (Expense)
-    { id: 'cat_makanan', name: 'Makanan & Minuman', type: 'expense', icon: 'restaurant', color: '#EF4444', budget: 2500000 },
-    { id: 'cat_transport', name: 'Transportasi & Bensin', type: 'expense', icon: 'directions_car', color: '#F97316', budget: 1000000 },
-    { id: 'cat_belanja', name: 'Belanja & Kebutuhan', type: 'expense', icon: 'shopping_bag', color: '#EC4899', budget: 1500000 },
-    { id: 'cat_tagihan', name: 'Tagihan & Utilitas', type: 'expense', icon: 'receipt_long', color: '#8B5CF6', budget: 1200000 },
-    { id: 'cat_hiburan', name: 'Hiburan & Liburan', type: 'expense', icon: 'movie', color: '#06B6D4', budget: 800000 },
-    { id: 'cat_kesehatan', name: 'Kesehatan & Obat', type: 'expense', icon: 'medical_services', color: '#10B981', budget: 500000 },
-    { id: 'cat_pendidikan', name: 'Edukasi & Kursus', type: 'expense', icon: 'school', color: '#3B82F6', budget: 500000 },
-    { id: 'cat_lainnya_exp', name: 'Lain-lain', type: 'expense', icon: 'more_horiz', color: '#64748B', budget: 300000 },
+const DEFAULT_CATEGORIES = [];
 
-    // Pemasukan (Income)
-    { id: 'cat_gaji', name: 'Gaji Utama', type: 'income', icon: 'payments', color: '#16A34A' },
-    { id: 'cat_freelance', name: 'Freelance & Side Project', type: 'income', icon: 'laptop_mac', color: '#2563EB' },
-    { id: 'cat_investasi', name: 'Investasi & Dividen', type: 'income', icon: 'trending_up', color: '#9333EA' },
-    { id: 'cat_bonus', name: 'Bonus & THR', type: 'income', icon: 'redeem', color: '#D97706' },
-    { id: 'cat_lainnya_inc', name: 'Pemasukan Lainnya', type: 'income', icon: 'account_balance_wallet', color: '#0D9488' }
-];
-
-// Default accounts / wallets
-const DEFAULT_ACCOUNTS = [
-    { id: 'acc_cash', name: 'Uang Tunai (Cash)', initialBalance: 1500000, icon: 'wallet', type: 'cash', color: '#10B981' },
-    { id: 'acc_bca', name: 'BCA Utama', initialBalance: 18500000, accountNumber: '8820194812', icon: 'account_balance', type: 'bank', color: '#2563EB' },
-    { id: 'acc_mandiri', name: 'Mandiri Payroll', initialBalance: 7200000, accountNumber: '14000182749', icon: 'account_balance', type: 'bank', color: '#0284C7' },
-    { id: 'acc_gopay', name: 'GoPay / OVO', initialBalance: 850000, accountNumber: '081234567890', icon: 'smartphone', type: 'ewallet', color: '#06B6D4' },
-    { id: 'acc_bibit', name: 'Bibit (Reksadana)', initialBalance: 15000000, icon: 'trending_up', type: 'investment', color: '#8B5CF6' }
-];
+// Default accounts / wallets (Kosong, siap diisi pengguna)
+const DEFAULT_ACCOUNTS = [];
 
 // Default savings goals
-const DEFAULT_GOALS = [
-    {
-        id: 'goal_darurat',
-        name: 'Dana Darurat (Emergency Fund)',
-        targetAmount: 30000000,
-        currentAmount: 18500000,
-        deadline: '2026-12-31',
-        icon: 'security',
-        color: '#2563EB',
-        notes: 'Target 6 bulan pengeluaran rutin'
-    },
-    {
-        id: 'goal_liburan',
-        name: 'Liburan Akhir Tahun ke Jepang',
-        targetAmount: 25000000,
-        currentAmount: 12000000,
-        deadline: '2026-11-20',
-        icon: 'flight_takeoff',
-        color: '#EC4899',
-        notes: 'Tiket pesawat & akomodasi Tokyo/Kyoto'
-    },
-    {
-        id: 'goal_laptop',
-        name: 'Upgrade Laptop Kerja M4 Pro',
-        targetAmount: 32000000,
-        currentAmount: 22500000,
-        deadline: '2026-10-15',
-        icon: 'laptop_mac',
-        color: '#8B5CF6',
-        notes: 'Untuk produktivitas programming & design'
-    }
-];
+const DEFAULT_GOALS = [];
 
 // Default bills and recurring subscriptions
-const DEFAULT_BILLS = [
-    {
-        id: 'bill_wifi',
-        name: 'Indihome 50 Mbps Fiber',
-        amount: 385000,
-        dueDay: 20,
-        frequency: 'Bulanan',
-        categoryId: 'cat_tagihan',
-        accountId: 'acc_bca',
-        icon: 'wifi',
-        isPaid: true,
-        lastPaidDate: '2026-08-19'
-    },
-    {
-        id: 'bill_listrik',
-        name: 'Token Listrik PLN',
-        amount: 500000,
-        dueDay: 5,
-        frequency: 'Bulanan',
-        categoryId: 'cat_tagihan',
-        accountId: 'acc_mandiri',
-        icon: 'bolt',
-        isPaid: true,
-        lastPaidDate: '2026-08-05'
-    },
-    {
-        id: 'bill_netflix',
-        name: 'Netflix Premium 4K',
-        amount: 186000,
-        dueDay: 28,
-        frequency: 'Bulanan',
-        categoryId: 'cat_hiburan',
-        accountId: 'acc_gopay',
-        icon: 'movie',
-        isPaid: false,
-        lastPaidDate: '2026-07-28'
-    },
-    {
-        id: 'bill_spotify',
-        name: 'Spotify Family Plan',
-        amount: 86900,
-        dueDay: 15,
-        frequency: 'Bulanan',
-        categoryId: 'cat_hiburan',
-        accountId: 'acc_gopay',
-        icon: 'headphones',
-        isPaid: true,
-        lastPaidDate: '2026-08-15'
-    },
-    {
-        id: 'bill_bpjs',
-        name: 'BPJS Kesehatan Kelas 1',
-        amount: 150000,
-        dueDay: 10,
-        frequency: 'Bulanan',
-        categoryId: 'cat_kesehatan',
-        accountId: 'acc_bca',
-        icon: 'medical_information',
-        isPaid: true,
-        lastPaidDate: '2026-08-10'
-    }
-];
+const DEFAULT_BILLS = [];
 
 // Sample transactions
 const getSampleTransactions = () => {
-    const today = new Date();
-    const formatDate = (offsetDays) => {
-        const d = new Date(today);
-        d.setDate(d.getDate() - offsetDays);
-        return d.toISOString().split('T')[0];
-    };
-
-    return [
-        {
-            id: 'trx_' + (Date.now() - 1000),
-            title: 'Gaji Bulanan',
-            amount: 12500000,
-            type: 'income',
-            categoryId: 'cat_gaji',
-            accountId: 'acc_bca',
-            date: formatDate(1),
-            notes: 'Transfer payroll bulanan'
-        },
-        {
-            id: 'trx_' + (Date.now() - 2000),
-            title: 'Belanja Bulanan Supermarket',
-            amount: 850000,
-            type: 'expense',
-            categoryId: 'cat_belanja',
-            accountId: 'acc_mandiri',
-            date: formatDate(1),
-            notes: 'Bahan masakan & perlengkapan rumah'
-        },
-        {
-            id: 'trx_' + (Date.now() - 3000),
-            title: 'Makan Siang & Kopi',
-            amount: 65000,
-            type: 'expense',
-            categoryId: 'cat_makanan',
-            accountId: 'acc_gopay',
-            date: formatDate(2),
-            notes: 'Makan siang bareng tim'
-        },
-        {
-            id: 'trx_' + (Date.now() - 4000),
-            title: 'Isi Bensin Pertamax',
-            amount: 150000,
-            type: 'expense',
-            categoryId: 'cat_transport',
-            accountId: 'acc_cash',
-            date: formatDate(3),
-            notes: 'Full tank mobil'
-        },
-        {
-            id: 'trx_' + (Date.now() - 5000),
-            title: 'Project Website Design',
-            amount: 4200000,
-            type: 'income',
-            categoryId: 'cat_freelance',
-            accountId: 'acc_bca',
-            date: formatDate(4),
-            notes: 'Pembayaran termin 1 UI/UX'
-        },
-        {
-            id: 'trx_' + (Date.now() - 6000),
-            title: 'Tagihan Internet & Listrik',
-            amount: 680000,
-            type: 'expense',
-            categoryId: 'cat_tagihan',
-            accountId: 'acc_mandiri',
-            date: formatDate(5),
-            notes: 'Indihome 50Mbps & Token PLN'
-        },
-        {
-            id: 'trx_' + (Date.now() - 7000),
-            title: 'Nonton Bioskop & Snack',
-            amount: 180000,
-            type: 'expense',
-            categoryId: 'cat_hiburan',
-            accountId: 'acc_gopay',
-            date: formatDate(6),
-            notes: 'Weekend movie with family'
-        },
-        {
-            id: 'trx_' + (Date.now() - 8000),
-            title: 'Dividen Reksadana',
-            amount: 350000,
-            type: 'income',
-            categoryId: 'cat_investasi',
-            accountId: 'acc_bca',
-            date: formatDate(8),
-            notes: 'Dividen pasar uang bulanan'
-        },
-        {
-            id: 'trx_' + (Date.now() - 9000),
-            title: 'Beli Vitamin & Obat Rutin',
-            amount: 120000,
-            type: 'expense',
-            categoryId: 'cat_kesehatan',
-            accountId: 'acc_cash',
-            date: formatDate(10),
-            notes: 'Apotek Century'
-        }
-    ];
+    return [];
 };
 
-class DataStore {
+class DataStoreEngine {
     constructor() {
         this.init();
     }
@@ -289,6 +76,9 @@ class DataStore {
 
     saveTransactions(transactions) {
         localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
+        if (window.SupabaseSync) {
+            window.SupabaseSync.pushTableToCloud('transactions', transactions);
+        }
     }
 
     addTransaction(tx) {
@@ -346,6 +136,9 @@ class DataStore {
 
     saveCategories(categories) {
         localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+        if (window.SupabaseSync) {
+            window.SupabaseSync.pushTableToCloud('categories', categories);
+        }
     }
 
     addCategory(cat) {
@@ -414,6 +207,9 @@ class DataStore {
 
     saveAccounts(accounts) {
         localStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(accounts));
+        if (window.SupabaseSync) {
+            window.SupabaseSync.pushTableToCloud('accounts', accounts);
+        }
     }
 
     addAccount(acc) {
@@ -496,6 +292,9 @@ class DataStore {
 
     saveGoals(goals) {
         localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(goals));
+        if (window.SupabaseSync) {
+            window.SupabaseSync.pushTableToCloud('goals', goals);
+        }
     }
 
     addGoal(goal) {
@@ -581,6 +380,9 @@ class DataStore {
 
     saveBills(bills) {
         localStorage.setItem(STORAGE_KEYS.BILLS, JSON.stringify(bills));
+        if (window.SupabaseSync) {
+            window.SupabaseSync.pushTableToCloud('bills', bills);
+        }
     }
 
     addBill(bill) {
@@ -757,5 +559,5 @@ const Utils = {
     }
 };
 
-window.DataStore = new DataStore();
+window.DataStore = new DataStoreEngine();
 window.Utils = Utils;

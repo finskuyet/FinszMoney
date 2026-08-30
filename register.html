@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar - FinszMoney</title>
+    <title>Daftar - LexFinszMoney</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -85,34 +85,38 @@
     </div>
 
     <!-- Script -->
+    <script type="module" src="js/supabaseSync.js"></script>
     <script src="js/auth.js"></script>
     <script>
         // Middleware: Redirect jika sudah login
         Auth.requireGuest();
 
-        document.getElementById('register-form').addEventListener('submit', function(e) {
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const errorDiv = document.getElementById('error-message');
+            
+            const btn = this.querySelector('button[type="submit"]');
+            btn.textContent = 'Memuat...';
 
             if (password !== confirmPassword) {
                 errorDiv.textContent = 'Konfirmasi password tidak cocok!';
                 errorDiv.classList.remove('hidden');
+                btn.textContent = 'Daftar Akun';
                 return;
             }
 
-            const result = Auth.register(name, email, password);
+            const result = await Auth.register(name, email, password);
 
             if (result.success) {
-                // Auto login setelah berhasil mendaftar
-                Auth.login(email, password);
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             } else {
                 errorDiv.textContent = result.message;
                 errorDiv.classList.remove('hidden');
+                btn.textContent = 'Daftar Akun';
             }
         });
     </script>

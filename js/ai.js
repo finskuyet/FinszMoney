@@ -1,41 +1,71 @@
-// ai.js - Logika Mock AI Assistant
+// ai.js - Logika AI Assistant dengan Gemini API
+
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
 const AIEngine = {
-    // Kata kunci dan respons statis (mocking backend)
-    generateResponse(message) {
-        const lowerMsg = message.toLowerCase();
-        const summary = DataStore.getSummary(DataStore.getTransactions());
-        
-        if (lowerMsg.includes('saldo') || lowerMsg.includes('uang') || lowerMsg.includes('sisa')) {
-            return `Total saldo bersih Anda saat ini adalah **${Utils.formatRupiah(summary.balance)}**. Ini dihitung dari total pemasukan dikurangi pengeluaran.`;
-        }
-        
-        if (lowerMsg.includes('pengeluaran') || lowerMsg.includes('habis')) {
-            return `Total pengeluaran tercatat Anda sejauh ini mencapai **${Utils.formatRupiah(summary.totalExpense)}**. Pastikan untuk tidak melebihi anggaran bulanan Anda ya!`;
+    async generateResponse(message) {
+        if (!apiKey) {
+            return `Maaf, sistem AI sedang offline karena API Key belum dikonfigurasi. Silakan tambahkan VITE_GEMINI_API_KEY di file .env Anda.`;
         }
 
-        if (lowerMsg.includes('pemasukan') || lowerMsg.includes('pendapatan')) {
-            return `Total pemasukan Anda tercatat sebesar **${Utils.formatRupiah(summary.totalIncome)}**. Bagus! Coba sisihkan sebagian untuk ditabung.`;
-        }
+        // Ambil data keuangan untuk memberikan konteks pada AI
+        const summary = window.DataStore.getSummary(window.DataStore.getTransactions());
+        const user = window.Auth.getCurrentUser();
+        const userName = user ? user.name : 'Pengguna';
+        
+        // System Prompt untuk menginstruksikan AI
+        const systemPrompt = `
+Anda adalah "LexFinsz AI", asisten keuangan pribadi yang profesional, ramah, dan pintar yang terintegrasi di dalam aplikasi LexFinszMoney.
+Nama pengguna adalah ${userName}.
+Berikut adalah ringkasan keuangan pengguna saat ini:
+- Total Saldo Bersih: Rp ${summary.balance.toLocaleString('id-ID')}
+- Total Pemasukan: Rp ${summary.totalIncome.toLocaleString('id-ID')}
+- Total Pengeluaran: Rp ${summary.totalExpense.toLocaleString('id-ID')}
+- Kekayaan Bersih: Rp ${summary.totalNetWorth.toLocaleString('id-ID')}
+- Jumlah Tagihan Belum Dibayar: ${summary.pendingBillsCount} (Total: Rp ${summary.pendingBillsAmount.toLocaleString('id-ID')})
 
-        if (lowerMsg.includes('tagihan') || lowerMsg.includes('bayar')) {
-            if (summary.pendingBillsCount > 0) {
-                return `Ada **${summary.pendingBillsCount} tagihan** yang belum Anda bayar bulan ini, dengan total **${Utils.formatRupiah(summary.pendingBillsAmount)}**. Jangan lupa dibayar sebelum jatuh tempo ya.`;
+ATURAN SANGAT PENTING:
+1. Anda HANYA BOLEH menjawab pertanyaan seputar keuangan, pencatatan uang, penghematan, tagihan, dan hal-hal yang berhubungan dengan aplikasi LexFinszMoney.
+2. JIKA pengguna bertanya di luar topik keuangan (misalnya: coding, sejarah, cuaca, politik, lelucon umum, dll), Anda HARUS MENOLAK dengan sopan dan mengingatkan mereka bahwa Anda hanya asisten keuangan LexFinszMoney.
+3. Jawab pertanyaan pengguna berdasarkan data di atas jika relevan.
+4. Berikan saran atau teguran ramah jika pengeluaran terlalu besar atau saldo menipis.
+5. Gunakan bahasa Indonesia yang santai tapi profesional.
+6. Format jawaban Anda menggunakan Markdown yang mudah dibaca.
+        `;
+
+        const requestBody = {
+            contents: [
+                { role: "user", parts: [{ text: systemPrompt }] },
+                { role: "model", parts: [{ text: "Baik, saya siap membantu Anda mengelola keuangan dengan pintar!" }] },
+                { role: "user", parts: [{ text: message }] }
+            ],
+            systemInstruction: {
+                role: "system",
+                parts: [{ text: "Anda adalah LexFinsz AI, penasihat keuangan pintar yang terintegrasi di aplikasi LexFinszMoney." }]
             }
-            return `Keren! Anda tidak memiliki tagihan yang tertunggak saat ini. Semua aman terkendali.`;
-        }
-        
-        if (lowerMsg.includes('hemat') || lowerMsg.includes('tips') || lowerMsg.includes('saran')) {
-            return `Berikut tips hemat dari Finsz AI:\n1. Terapkan prinsip 50/30/20 (50% kebutuhan, 30% keinginan, 20% tabungan).\n2. Kurangi membeli kopi mahal setiap hari.\n3. Lunasi tagihan tepat waktu agar bebas denda.`;
-        }
+        };
 
-        if (lowerMsg.includes('halo') || lowerMsg.includes('hai')) {
-            const user = Auth.getCurrentUser();
-            const name = user ? user.name : 'Sahabat Finsz';
-            return `Halo ${name}! Saya Finsz AI, asisten keuangan pribadi Anda. Ada yang bisa saya bantu terkait saldo, pengeluaran, atau tips keuangan hari ini?`;
-        }
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            });
 
-        return `Maaf, saya masih dalam tahap pengembangan (Offline Mode). Cobalah tanyakan seputar "saldo", "pengeluaran", "tagihan", atau "tips hemat".`;
+            if (!response.ok) {
+                console.error("API Error:", await response.text());
+                return `Maaf, saya sedang mengalami kendala teknis saat menghubungi server otak saya. Coba lagi nanti ya!`;
+            }
+
+            const data = await response.json();
+            if (data.candidates && data.candidates.length > 0) {
+                return data.candidates[0].content.parts[0].text;
+            }
+            return `Maaf, saya tidak mengerti maksud Anda.`;
+        } catch (error) {
+            console.error("Gemini API Error:", error);
+            return `Maaf, koneksi ke server AI terputus. Pastikan internet Anda stabil.`;
+        }
     }
 };
 
@@ -57,7 +87,7 @@ const AIChat = {
         }, 500);
     },
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
         const message = this.input.value.trim();
         if (!message) return;
@@ -69,12 +99,11 @@ const AIChat = {
         // Tampilkan indikator typing
         this.showTypingIndicator();
 
-        // Simulasi delay AI (1 detik)
-        setTimeout(() => {
-            this.removeTypingIndicator();
-            const response = AIEngine.generateResponse(message);
-            this.appendMessage('AI', response);
-        }, 1000);
+        // Panggil API Gemini
+        const response = await AIEngine.generateResponse(message);
+        
+        this.removeTypingIndicator();
+        this.appendMessage('AI', response);
     },
 
     appendMessage(sender, text) {
@@ -145,7 +174,8 @@ const AIChat = {
     }
 };
 
-// Initialize after DOM load
+// Initialize after DOM load, expose AIChat to window just in case
+window.AIChat = AIChat;
 document.addEventListener('DOMContentLoaded', () => {
     AIChat.init();
 });

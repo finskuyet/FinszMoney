@@ -8,10 +8,39 @@ const supabase = (supabaseUrl && supabaseKey && supabaseUrl !== 'https://your-pr
     ? createClient(supabaseUrl, supabaseKey) 
     : null;
 
+const toSnakeCase = (obj) => {
+    if (typeof obj !== 'object' || obj === null) return obj;
+    if (Array.isArray(obj)) return obj.map(toSnakeCase);
+    const newObj = {};
+    for (const key in obj) {
+        // Pengecualian untuk keys tertentu
+        if (key === 'notes' && obj.notes) {
+            newObj['note'] = obj[key];
+        } else {
+            const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+            newObj[snakeKey] = obj[key];
+        }
+    }
+    return newObj;
+};
+
+const toCamelCase = (obj) => {
+    if (typeof obj !== 'object' || obj === null) return obj;
+    if (Array.isArray(obj)) return obj.map(toCamelCase);
+    const newObj = {};
+    for (const key in obj) {
+        if (key === 'note' && obj.note) {
+            newObj['notes'] = obj[key];
+        } else {
+            const camelKey = key.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+            newObj[camelKey] = obj[key];
+        }
+    }
+    return newObj;
+};
+
 window.SupabaseSync = {
     supabase,
-    
-    // Auth: Register
     async register(email, password, name) {
         if (!this.supabase) return { success: false, message: 'Supabase belum dikonfigurasi di .env' };
         
@@ -90,11 +119,11 @@ window.SupabaseSync = {
                 };
                 localStorage.setItem('settings', JSON.stringify(settings));
             }
-            if (txReq.data) localStorage.setItem('transactions', JSON.stringify(txReq.data));
-            if (catReq.data) localStorage.setItem('categories', JSON.stringify(catReq.data));
-            if (accReq.data) localStorage.setItem('accounts', JSON.stringify(accReq.data));
-            if (goalReq.data) localStorage.setItem('goals', JSON.stringify(goalReq.data));
-            if (billReq.data) localStorage.setItem('bills', JSON.stringify(billReq.data));
+            if (txReq.data) localStorage.setItem('transactions', JSON.stringify(toCamelCase(txReq.data)));
+            if (catReq.data) localStorage.setItem('categories', JSON.stringify(toCamelCase(catReq.data)));
+            if (accReq.data) localStorage.setItem('accounts', JSON.stringify(toCamelCase(accReq.data)));
+            if (goalReq.data) localStorage.setItem('goals', JSON.stringify(toCamelCase(goalReq.data)));
+            if (billReq.data) localStorage.setItem('bills', JSON.stringify(toCamelCase(billReq.data)));
 
             console.log('Sinkronisasi Supabase ke LocalStorage berhasil.');
         } catch (error) {
@@ -110,7 +139,8 @@ window.SupabaseSync = {
 
         try {
             // Karena ini sinkronisasi sederhana, kita update dengan pendekatan upsert
-            const formattedData = dataArray.map(item => ({
+            const snakeDataArray = toSnakeCase(dataArray);
+            const formattedData = snakeDataArray.map(item => ({
                 ...item,
                 user_id: user.id
             }));
