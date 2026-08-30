@@ -109,6 +109,7 @@ window.SupabaseSync = {
             ]);
 
             // Save to LocalStorage format yang dikenali oleh aplikasi (DataStore)
+            const suffix = `_${userId}`;
             if (usersReq.data) {
                 const settings = {
                     userName: usersReq.data.name,
@@ -117,13 +118,13 @@ window.SupabaseSync = {
                     monthlyBudgetTotal: usersReq.data.monthly_budget_total || 0,
                     darkMode: usersReq.data.dark_mode || false
                 };
-                localStorage.setItem('settings', JSON.stringify(settings));
+                localStorage.setItem('lexfinszmoney_settings_v1' + suffix, JSON.stringify(settings));
             }
-            if (txReq.data) localStorage.setItem('transactions', JSON.stringify(toCamelCase(txReq.data)));
-            if (catReq.data) localStorage.setItem('categories', JSON.stringify(toCamelCase(catReq.data)));
-            if (accReq.data) localStorage.setItem('accounts', JSON.stringify(toCamelCase(accReq.data)));
-            if (goalReq.data) localStorage.setItem('goals', JSON.stringify(toCamelCase(goalReq.data)));
-            if (billReq.data) localStorage.setItem('bills', JSON.stringify(toCamelCase(billReq.data)));
+            if (txReq.data) localStorage.setItem('lexfinszmoney_transactions_v1' + suffix, JSON.stringify(toCamelCase(txReq.data)));
+            if (catReq.data) localStorage.setItem('lexfinszmoney_categories_v1' + suffix, JSON.stringify(toCamelCase(catReq.data)));
+            if (accReq.data) localStorage.setItem('lexfinszmoney_accounts_v1' + suffix, JSON.stringify(toCamelCase(accReq.data)));
+            if (goalReq.data) localStorage.setItem('lexfinszmoney_goals_v1' + suffix, JSON.stringify(toCamelCase(goalReq.data)));
+            if (billReq.data) localStorage.setItem('lexfinszmoney_bills_v1' + suffix, JSON.stringify(toCamelCase(billReq.data)));
 
             console.log('Sinkronisasi Supabase ke LocalStorage berhasil.');
         } catch (error) {
