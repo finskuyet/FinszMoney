@@ -53,8 +53,14 @@ ATURAN SANGAT PENTING:
             });
 
             if (!response.ok) {
-                console.error("API Error:", await response.text());
-                return `Maaf, saya sedang mengalami kendala teknis saat menghubungi server otak saya. Coba lagi nanti ya!`;
+                const errText = await response.text();
+                console.error("API Error:", errText);
+                try {
+                    const errObj = JSON.parse(errText);
+                    return `Maaf, terjadi error dari server Google Gemini: **${errObj.error.message}**`;
+                } catch(e) {
+                    return `Maaf, terjadi error HTTP ${response.status} dari server AI. Coba lagi nanti ya!`;
+                }
             }
 
             const data = await response.json();
