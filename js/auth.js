@@ -120,7 +120,7 @@ const Auth = {
         localStorage.removeItem('lexfinszmoney_goals_v1');
         localStorage.removeItem('lexfinszmoney_bills_v1');
         
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     },
 
     // Middleware: Hanya bisa diakses jika sudah login
