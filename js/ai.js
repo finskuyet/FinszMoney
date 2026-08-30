@@ -40,8 +40,8 @@ ATURAN SANGAT PENTING:
         `;
 
         try {
-            // Gunakan gemini-1.5-flash: 1500 request/hari di free tier
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            // Gunakan gemini-2.0-flash: kualitas lebih baik, 1500 request/hari gratis
+            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
             
             // Gabungkan instruksi sistem dengan pesan pengguna
             const fullPrompt = systemPrompt + "\n\n---\n\n" + "Pertanyaan Pengguna: " + message;
