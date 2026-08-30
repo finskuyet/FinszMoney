@@ -38,19 +38,8 @@ const App = {
 
     async syncFromCloud() {
         this.updateConnectionStatus();
-        if (!window.SupabaseSync || !window.SupabaseSync.supabase) return;
-        try {
-            const sessionStr = localStorage.getItem('lexfinszmoney_current_user');
-            if (!sessionStr) return;
-            const user = JSON.parse(sessionStr);
-            if (!user?.id) return;
-            await window.SupabaseSync.pullDataToLocal(user.id);
-            // Reload tampilan setelah data terbaru dari cloud masuk
-            this.handleHashChange();
-            this.populateDropdowns();
-        } catch(e) {
-            console.warn('Sync cloud gagal:', e);
-        }
+        // Sync disabled on page refresh to prevent overwriting local un-pushed data.
+        // Data is already pulled from cloud during login in auth.js.
     },
 
     updateUserProfile(user) {
@@ -87,7 +76,7 @@ const App = {
 
     handleHashChange() {
         const hash = window.location.hash.replace('#', '');
-        const validTabs = ['dashboard', 'transactions', 'reports', 'categories', 'goals', 'accounts', 'bills', 'settings', 'ai', 'guide'];
+        const validTabs = ['dashboard', 'transactions', 'reports', 'categories', 'goals', 'accounts', 'bills', 'settings', 'guide'];
         if (validTabs.includes(hash)) {
             this.switchTab(hash, false);
         } else {
@@ -148,11 +137,7 @@ const App = {
     switchTab(tabId, updateHash = true) {
         this.currentTab = tabId;
         if (updateHash) {
-            if (tabId === 'ai') {
-                history.replaceState(null, null, window.location.pathname);
-            } else {
-                window.location.hash = tabId;
-            }
+            window.location.hash = tabId;
         }
 
         // 1. Update Desktop Sidebar nav item active states

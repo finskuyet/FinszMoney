@@ -117,16 +117,6 @@
                     </a>
                 </div>
 
-                <!-- Section: LexFinsz AI -->
-                <div class="space-y-1">
-                    <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Asisten</p>
-
-                    <a href="#ai" data-tab="ai" onclick="App.switchTab('ai')" class="nav-link flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100 transition-all">
-                        <span class="material-symbols-outlined text-xl text-purple-600 dark:text-purple-400">smart_toy</span>
-                        <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400">LexFinsz AI</span>
-                    </a>
-                </div>
-
                 <!-- Section: Pengaturan & Data -->
                 <div class="space-y-1">
                     <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Preferensi</p>
@@ -497,7 +487,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                             <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Dana Terkumpul di Tabungan</span>
-                            <h3 id="goals-total-saved" class="text-2xl lg:text-3xl font-extrabold text-blue-600 dark:text-blue-400 mt-2">Rp 0</h3>
+                            <h3 id="goals-total-saved" class="text-2xl lg:text-3xl font-extrabold text-blue-600 dark:blue-400 mt-2">Rp 0</h3>
                         </div>
                         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                             <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Target Keseluruhan</span>
@@ -711,35 +701,6 @@
                                 <span>Reset ke Data Demo</span>
                             </button>
                             <input type="file" id="import-json-file" accept=".json" class="hidden">
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ================= 9. VIEW: FINSZ AI (CHAT ASSISTANT) ================= -->
-                <section id="view-ai" class="view-section h-full hidden flex-col w-full max-w-4xl mx-auto">
-                    <div class="mb-4">
-                        <h2 class="text-xl lg:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-2xl text-purple-600 dark:text-purple-400">smart_toy</span>
-                            <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400">LexFinsz AI</span>
-                        </h2>
-                        <p class="text-xs text-slate-400">Asisten keuangan cerdas pribadi Anda</p>
-                    </div>
-
-                    <div class="flex-1 flex flex-col bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden" style="min-h: 500px;">
-                        <!-- Chat Box -->
-                        <div id="ai-chat-box" class="flex-1 overflow-y-auto p-4 lg:p-6 bg-slate-50/50 dark:bg-slate-900/50">
-                            <!-- Pesan akan dimuat di sini -->
-                        </div>
-                        
-                        <!-- Input Box -->
-                        <div class="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-                            <form id="ai-chat-form" class="flex gap-2">
-                                <input type="text" id="ai-chat-input" placeholder="Tanyakan soal saldo, tagihan, atau pengeluaran..." class="flex-1 px-4 py-3 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none text-slate-900 dark:text-slate-100">
-                                <button type="submit" class="p-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl shadow-lg shadow-purple-500/30 flex items-center justify-center transition-colors">
-                                    <span class="material-symbols-outlined">send</span>
-                                </button>
-                            </form>
-                            <p class="text-[10px] text-center text-slate-400 mt-2">AI dapat membuat kesalahan. Periksa info penting di tab lainnya.</p>
                         </div>
                     </div>
                 </section>
@@ -1226,10 +1187,6 @@
                 <span class="material-symbols-outlined text-xl">category</span>
                 <span>Kategori & Anggaran</span>
             </a>
-            <a href="#ai" data-tab="ai" onclick="App.switchTab('ai')" class="drawer-nav-link flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100 transition-all">
-                <span class="material-symbols-outlined text-xl text-purple-600 dark:text-purple-400">smart_toy</span>
-                <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400">LexFinsz AI</span>
-            </a>
             <button onclick="if(window.Guide) { App.closeMobileDrawer(); window.Guide.start(App.currentTab); }" class="w-full text-left flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">
                 <span class="material-symbols-outlined text-xl">help</span>
                 <span>Panduan Halaman</span>
@@ -1300,6 +1257,6 @@
     <script type="module" src="js/charts.js"></script>
     <script type="module" src="js/guide.js"></script>
     <script type="module" src="js/app.js"></script>
-    <script type="module" src="js/ai.js"></script>
+
 </body>
 </html>
