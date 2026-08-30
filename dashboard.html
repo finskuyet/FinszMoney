@@ -675,11 +675,11 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="settings-saving-target" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Target Tabungan Bulanan (Rp)</label>
-                                    <input id="settings-saving-target" type="number" step="100000" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                                    <input id="settings-saving-target" type="number" step="1" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                                 </div>
                                 <div>
                                     <label for="settings-budget-total" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Batas Anggaran Pengeluaran Total (Rp)</label>
-                                    <input id="settings-budget-total" type="number" step="100000" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                                    <input id="settings-budget-total" type="number" step="1" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                                 </div>
                             </div>
 
@@ -782,7 +782,7 @@
                     <label for="tx-amount" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nominal (Rp) *</label>
                     <div class="relative">
                         <span class="absolute left-3.5 top-2.5 font-bold text-slate-400 text-sm">Rp</span>
-                        <input id="tx-amount" type="number" required placeholder="0" min="1" step="1000" class="w-full pl-12 pr-4 py-2.5 text-base font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                        <input id="tx-amount" type="number" required placeholder="0" min="1" step="1" class="w-full pl-12 pr-4 py-2.5 text-base font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                     </div>
                 </div>
 
@@ -901,7 +901,7 @@
 
                 <div>
                     <label for="cat-budget" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Alokasi Anggaran Bulanan (Opsional)</label>
-                    <input id="cat-budget" type="number" placeholder="Contoh: 1000000" min="0" step="100000" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                    <input id="cat-budget" type="number" placeholder="Contoh: 1000000" min="0" step="1" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                 </div>
 
                 <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
@@ -1005,7 +1005,7 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label for="goal-target" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Target Total (Rp) *</label>
-                        <input id="goal-target" type="number" required placeholder="0" step="100000" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                        <input id="goal-target" type="number" required placeholder="0" step="1" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                     </div>
 
                     <div>
@@ -1073,7 +1073,7 @@
 
                 <div>
                     <label for="deposit-goal-amount" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nominal Setoran (Rp) *</label>
-                    <input id="deposit-goal-amount" type="number" required placeholder="0" min="1000" step="10000" class="w-full px-4 py-2.5 text-base font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                    <input id="deposit-goal-amount" type="number" required placeholder="0" min="1" step="1" class="w-full px-4 py-2.5 text-base font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                 </div>
 
                 <div>
@@ -1113,7 +1113,7 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label for="bill-amount" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nominal (Rp) *</label>
-                        <input id="bill-amount" type="number" required placeholder="0" step="1000" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
+                        <input id="bill-amount" type="number" required placeholder="0" step="1" class="w-full px-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900 dark:text-slate-100">
                     </div>
 
                     <div>
