@@ -127,7 +127,7 @@ const Auth = {
     requireAuth() {
         const user = this.getCurrentUser();
         if (!user) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
             return null;
         }
         return user;
@@ -135,11 +135,10 @@ const Auth = {
 
     // Middleware: Hanya bisa diakses jika belum login (halaman login/register)
     requireGuest() {
-        const user = this.getCurrentUser();
-        if (user) {
-            window.location.href = 'index.html';
+        if (this.getCurrentUser()) {
+            window.location.href = 'dashboard.html';
         }
-    }
+    },
 };
 
 // Daftarkan ke global window

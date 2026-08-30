@@ -80,7 +80,7 @@
 
         <!-- Footer -->
         <div class="text-center text-sm text-slate-500">
-            Sudah punya akun? <a href="login.html" class="text-blue-600 font-semibold hover:underline">Masuk di sini</a>
+            Sudah punya akun? <a href="index.html" class="text-blue-600 font-semibold hover:underline">Masuk di sini</a>
         </div>
     </div>
 
@@ -112,7 +112,7 @@
             const result = await Auth.register(name, email, password);
 
             if (result.success) {
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             } else {
                 errorDiv.textContent = result.message;
                 errorDiv.classList.remove('hidden');
