@@ -32,7 +32,25 @@ const App = {
         // Listen for online/offline status
         window.addEventListener('online', () => this.updateConnectionStatus());
         window.addEventListener('offline', () => this.updateConnectionStatus());
+        // Sync data dari cloud jika Supabase aktif (agar data selalu up-to-date antar perangkat)
+        this.syncFromCloud();
+    },
+
+    async syncFromCloud() {
         this.updateConnectionStatus();
+        if (!window.SupabaseSync || !window.SupabaseSync.supabase) return;
+        try {
+            const sessionStr = localStorage.getItem('lexfinszmoney_current_user');
+            if (!sessionStr) return;
+            const user = JSON.parse(sessionStr);
+            if (!user?.id) return;
+            await window.SupabaseSync.pullDataToLocal(user.id);
+            // Reload tampilan setelah data terbaru dari cloud masuk
+            this.handleHashChange();
+            this.populateDropdowns();
+        } catch(e) {
+            console.warn('Sync cloud gagal:', e);
+        }
     },
 
     updateUserProfile(user) {

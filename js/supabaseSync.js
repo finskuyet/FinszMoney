@@ -136,7 +136,7 @@ window.SupabaseSync = {
     async pushTableToCloud(tableName, dataArray) {
         if (!this.supabase) return;
 
-        // Ambil user dari sesi localStorage (lebih andal daripada supabase.auth.getUser di non-Vite)
+        // Ambil user dari sesi localStorage
         let userId = null;
         try {
             const sessionStr = localStorage.getItem('lexfinszmoney_current_user');
@@ -153,24 +153,25 @@ window.SupabaseSync = {
             } catch(e) {}
         }
 
-        if (!userId) return; // Harus login untuk sync
+        if (!userId) return;
 
         try {
-            // Karena ini sinkronisasi sederhana, kita update dengan pendekatan upsert
-            const snakeDataArray = toSnakeCase(dataArray);
-            const formattedData = snakeDataArray.map(item => ({
-                ...item,
-                user_id: userId
-            }));
-            
-            const { error } = await this.supabase
-                .from(tableName)
-                .upsert(formattedData);
+            // Hapus semua data lama milik user di tabel ini, lalu insert ulang
+            // Ini memastikan data yang dihapus di aplikasi juga hilang dari cloud
+            await this.supabase.from(tableName).delete().eq('user_id', userId);
 
-            if (error) throw error;
-            console.log(`Sync ${tableName} ke Supabase berhasil.`);
+            if (dataArray && dataArray.length > 0) {
+                const snakeDataArray = toSnakeCase(dataArray);
+                const formattedData = snakeDataArray.map(item => ({
+                    ...item,
+                    user_id: userId
+                }));
+                const { error } = await this.supabase.from(tableName).insert(formattedData);
+                if (error) throw error;
+            }
+            console.log(`✅ Sync ${tableName} ke Supabase berhasil (${dataArray?.length || 0} records).`);
         } catch (error) {
-            console.error(`Gagal sync ${tableName}:`, error);
+            console.error(`❌ Gagal sync ${tableName}:`, error.message || error);
         }
     }
 };
