@@ -1,15 +1,15 @@
 /**
- * FinszMoney - Data Storage & Calculation Engine
+ * LexFinszMoney - Data Storage & Calculation Engine
  * Comprehensive Personal Finance Platform
  */
 
 const STORAGE_KEYS = {
-    TRANSACTIONS: 'finszmoney_transactions_v1',
-    CATEGORIES: 'finszmoney_categories_v1',
-    ACCOUNTS: 'finszmoney_accounts_v1',
-    GOALS: 'finszmoney_goals_v1',
-    BILLS: 'finszmoney_bills_v1',
-    SETTINGS: 'finszmoney_settings_v1'
+    TRANSACTIONS: 'lexfinszmoney_transactions_v1',
+    CATEGORIES: 'lexfinszmoney_categories_v1',
+    ACCOUNTS: 'lexfinszmoney_accounts_v1',
+    GOALS: 'lexfinszmoney_goals_v1',
+    BILLS: 'lexfinszmoney_bills_v1',
+    SETTINGS: 'lexfinszmoney_settings_v1'
 };
 
 // Default pre-seeded categories
@@ -58,7 +58,7 @@ class DataStoreEngine {
                 monthlySavingTarget: 5000000,
                 monthlyBudgetTotal: 10000000,
                 userName: 'Alex Finz',
-                userEmail: 'alex@finszmoney.com',
+                userEmail: 'alex@lexfinszmoney.com',
                 userRole: 'Premium Plan'
             }));
         }

@@ -1,5 +1,5 @@
 /**
- * FinszMoney - Application Main Controller
+ * LexFinszMoney - Application Main Controller
  * Handles Views: Dashboard, Transactions, Reports, Categories, Goals, Accounts, Bills, Settings
  */
 
@@ -1515,7 +1515,7 @@ const App = {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `FinszMoney_Export_${new Date().toISOString().split('T')[0]}.csv`);
+        link.setAttribute('download', `LexFinszMoney_Export_${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -1537,7 +1537,7 @@ const App = {
         const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(backupData, null, 2));
         const link = document.createElement('a');
         link.setAttribute('href', dataStr);
-        link.setAttribute('download', `FinszMoney_Complete_Backup_${new Date().toISOString().split('T')[0]}.json`);
+        link.setAttribute('download', `LexFinszMoney_Complete_Backup_${new Date().toISOString().split('T')[0]}.json`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

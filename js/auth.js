@@ -1,8 +1,8 @@
 // auth.js - Menangani sistem autentikasi menggunakan localStorage
 
 const AUTH_KEYS = {
-    USERS: 'finszmoney_users',
-    CURRENT_USER: 'finszmoney_current_user'
+    USERS: 'lexfinszmoney_users',
+    CURRENT_USER: 'lexfinszmoney_current_user'
 };
 
 const Auth = {
@@ -112,13 +112,13 @@ const Auth = {
     },
 
     logout() {
-        // Clear all FinszMoney data from localStorage upon logout
+        // Clear all LexFinszMoney data from localStorage upon logout
         localStorage.removeItem(AUTH_KEYS.CURRENT_USER);
-        localStorage.removeItem('finszmoney_transactions_v1');
-        localStorage.removeItem('finszmoney_categories_v1');
-        localStorage.removeItem('finszmoney_accounts_v1');
-        localStorage.removeItem('finszmoney_goals_v1');
-        localStorage.removeItem('finszmoney_bills_v1');
+        localStorage.removeItem('lexfinszmoney_transactions_v1');
+        localStorage.removeItem('lexfinszmoney_categories_v1');
+        localStorage.removeItem('lexfinszmoney_accounts_v1');
+        localStorage.removeItem('lexfinszmoney_goals_v1');
+        localStorage.removeItem('lexfinszmoney_bills_v1');
         
         window.location.href = 'login.html';
     },

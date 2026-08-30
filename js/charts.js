@@ -1,5 +1,5 @@
 /**
- * FinszMoney - Chart.js Visualizations
+ * LexFinszMoney - Chart.js Visualizations
  */
 
 let cashFlowChartInstance = null;
