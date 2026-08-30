@@ -135,15 +135,32 @@ window.SupabaseSync = {
     // Sync: Dorong data spesifik ke Cloud (Dipanggil tiap kali DataStore menyimpan)
     async pushTableToCloud(tableName, dataArray) {
         if (!this.supabase) return;
-        const { data: { user } } = await this.supabase.auth.getUser();
-        if (!user) return; // Harus login untuk sync
+
+        // Ambil user dari sesi localStorage (lebih andal daripada supabase.auth.getUser di non-Vite)
+        let userId = null;
+        try {
+            const sessionStr = localStorage.getItem('lexfinszmoney_current_user');
+            if (sessionStr) {
+                userId = JSON.parse(sessionStr)?.id;
+            }
+        } catch(e) {}
+
+        // Fallback ke Supabase session
+        if (!userId) {
+            try {
+                const { data } = await this.supabase.auth.getUser();
+                userId = data?.user?.id;
+            } catch(e) {}
+        }
+
+        if (!userId) return; // Harus login untuk sync
 
         try {
             // Karena ini sinkronisasi sederhana, kita update dengan pendekatan upsert
             const snakeDataArray = toSnakeCase(dataArray);
             const formattedData = snakeDataArray.map(item => ({
                 ...item,
-                user_id: user.id
+                user_id: userId
             }));
             
             const { error } = await this.supabase
