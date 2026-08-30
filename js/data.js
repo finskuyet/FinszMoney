@@ -1,5 +1,5 @@
 /**
- * LexFinszMoney - Data Storage & Calculation Engine
+ * LFMoney - Data Storage & Calculation Engine
  * Comprehensive Personal Finance Platform
  */
 

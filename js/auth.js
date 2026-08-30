@@ -112,7 +112,7 @@ const Auth = {
     },
 
     logout() {
-        // Clear all LexFinszMoney data from localStorage upon logout
+        // Clear all LFMoney data from localStorage upon logout
         localStorage.removeItem(AUTH_KEYS.CURRENT_USER);
         localStorage.removeItem('lexfinszmoney_transactions_v1');
         localStorage.removeItem('lexfinszmoney_categories_v1');
