@@ -40,8 +40,8 @@ ATURAN SANGAT PENTING:
         `;
 
         try {
-            // Gunakan gemini-2.0-flash-exp: stabil dan 1500 request/hari gratis
-            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+            // Gunakan gemini-2.5-flash (tersedia untuk key ini)
+            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
             
             // Gabungkan instruksi sistem dengan pesan pengguna
             const fullPrompt = systemPrompt + "\n\n---\n\n" + "Pertanyaan Pengguna: " + message;
