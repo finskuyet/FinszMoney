@@ -80,12 +80,35 @@ const App = {
     // Theme setup (Dark / Light mode)
     setupTheme() {
         const settings = DataStore.getSettings();
-        if (settings.darkMode) {
-            document.documentElement.classList.add('dark');
+        if (settings.darkMode !== undefined) {
+            if (settings.darkMode) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         } else {
-            document.documentElement.classList.remove('dark');
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
         this.updateThemeToggleIcon();
+
+        // Listen for OS theme changes if no explicit user preference
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                const currentSettings = DataStore.getSettings();
+                if (currentSettings.darkMode === undefined) {
+                    if (event.matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    this.updateThemeToggleIcon();
+                }
+            });
+        }
     },
 
     toggleTheme() {
