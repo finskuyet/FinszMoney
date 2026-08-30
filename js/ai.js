@@ -1,10 +1,15 @@
 // ai.js - Logika AI Assistant dengan Gemini API
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+let genAI = null;
+if (apiKey) {
+    genAI = new GoogleGenerativeAI(apiKey);
+}
 
 const AIEngine = {
     async generateResponse(message) {
-        if (!apiKey) {
+        if (!genAI) {
             return `Maaf, sistem AI sedang offline karena API Key belum dikonfigurasi. Silakan tambahkan VITE_GEMINI_API_KEY di file .env Anda.`;
         }
 
@@ -33,40 +38,29 @@ ATURAN SANGAT PENTING:
 6. Format jawaban Anda menggunakan Markdown yang mudah dibaca.
         `;
 
-        const requestBody = {
-            contents: [
-                { role: "user", parts: [{ text: systemPrompt }] },
-                { role: "model", parts: [{ text: "Baik, saya siap membantu Anda mengelola keuangan dengan pintar!" }] },
-                { role: "user", parts: [{ text: message }] }
-            ]
-        };
-
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
-
-            if (!response.ok) {
-                const errText = await response.text();
-                console.error("API Error:", errText);
-                try {
-                    const errObj = JSON.parse(errText);
-                    return `Maaf, terjadi error dari server Google Gemini: **${errObj.error.message}**`;
-                } catch(e) {
-                    return `Maaf, terjadi error HTTP ${response.status} dari server AI. Coba lagi nanti ya!`;
-                }
-            }
-
-            const data = await response.json();
-            if (data.candidates && data.candidates.length > 0) {
-                return data.candidates[0].content.parts[0].text;
+            // Gunakan model default yang direkomendasikan Google
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            
+            // Gabungkan instruksi sistem dengan pesan pengguna
+            const fullPrompt = systemPrompt + "\n\n---\n\n" + "Pertanyaan Pengguna: " + message;
+            
+            const result = await model.generateContent(fullPrompt);
+            const responseText = result.response.text();
+            
+            if (responseText) {
+                return responseText;
             }
             return `Maaf, saya tidak mengerti maksud Anda.`;
         } catch (error) {
             console.error("Gemini API Error:", error);
-            return `Maaf, koneksi ke server AI terputus. Pastikan internet Anda stabil.`;
+            
+            // Tangkap pesan error spesifik jika API Key ditolak atau dibatasi
+            if (error.message) {
+                return `Maaf, terjadi error dari server Google Gemini: **${error.message}**`;
+            }
+            
+            return `Maaf, koneksi ke server AI terputus atau terjadi gangguan. Pastikan API Key valid dan internet stabil.`;
         }
     }
 };
