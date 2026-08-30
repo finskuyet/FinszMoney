@@ -36,12 +36,12 @@ const App = {
     },
 
     updateUserProfile(user) {
-        const nameEl = document.getElementById('user-profile-name');
-        const initialEl = document.getElementById('user-profile-initial');
-        if (nameEl) nameEl.textContent = user.name;
-        if (initialEl) {
-            initialEl.textContent = user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        }
+        const nameEls = document.querySelectorAll('.user-profile-name-text, #user-profile-name');
+        const initialEls = document.querySelectorAll('.user-profile-initial-text, #user-profile-initial');
+        nameEls.forEach(el => el.textContent = user.name);
+        initialEls.forEach(el => {
+            el.textContent = user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        });
     },
 
     updateConnectionStatus() {
