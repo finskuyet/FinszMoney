@@ -35,7 +35,8 @@ ATURAN SANGAT PENTING:
 3. Jawab pertanyaan pengguna berdasarkan data di atas jika relevan.
 4. Berikan saran atau teguran ramah jika pengeluaran terlalu besar atau saldo menipis.
 5. Gunakan bahasa Indonesia yang santai tapi profesional.
-6. Format jawaban Anda menggunakan Markdown yang mudah dibaca.
+6. SANGAT PENTING: Berikan jawaban yang SANGAT SINGKAT, padat, dan langsung ke intinya (maksimal 2-3 kalimat) untuk menghemat token dan kuota. Hindari basa-basi panjang.
+7. Format jawaban Anda menggunakan Markdown yang mudah dibaca.
         `;
 
         try {
