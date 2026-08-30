@@ -3,13 +3,24 @@
  * Comprehensive Personal Finance Platform
  */
 
+const getUserSuffix = () => {
+    try {
+        const userStr = localStorage.getItem('lexfinszmoney_current_user');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return user && user.id ? `_${user.id}` : '';
+        }
+    } catch(e) {}
+    return '';
+};
+
 const STORAGE_KEYS = {
-    TRANSACTIONS: 'lexfinszmoney_transactions_v1',
-    CATEGORIES: 'lexfinszmoney_categories_v1',
-    ACCOUNTS: 'lexfinszmoney_accounts_v1',
-    GOALS: 'lexfinszmoney_goals_v1',
-    BILLS: 'lexfinszmoney_bills_v1',
-    SETTINGS: 'lexfinszmoney_settings_v1'
+    get TRANSACTIONS() { return 'lexfinszmoney_transactions_v1' + getUserSuffix(); },
+    get CATEGORIES() { return 'lexfinszmoney_categories_v1' + getUserSuffix(); },
+    get ACCOUNTS() { return 'lexfinszmoney_accounts_v1' + getUserSuffix(); },
+    get GOALS() { return 'lexfinszmoney_goals_v1' + getUserSuffix(); },
+    get BILLS() { return 'lexfinszmoney_bills_v1' + getUserSuffix(); },
+    get SETTINGS() { return 'lexfinszmoney_settings_v1' + getUserSuffix(); }
 };
 
 // Default pre-seeded categories
@@ -35,6 +46,7 @@ class DataStoreEngine {
     }
 
     init() {
+        this.migrateLegacyData();
         if (!localStorage.getItem(STORAGE_KEYS.CATEGORIES)) {
             localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(DEFAULT_CATEGORIES));
         }
@@ -61,6 +73,25 @@ class DataStoreEngine {
                 userEmail: 'alex@lexfinszmoney.com',
                 userRole: 'Premium Plan'
             }));
+        }
+    }
+
+    migrateLegacyData() {
+        const suffix = getUserSuffix();
+        if (!suffix) return;
+        const migratedFlag = 'lexfinszmoney_migrated' + suffix;
+        if (!localStorage.getItem(migratedFlag)) {
+            const keys = ['transactions', 'categories', 'accounts', 'goals', 'bills', 'settings'];
+            keys.forEach(key => {
+                const legacyKey = `lexfinszmoney_${key}_v1`;
+                const newKey = legacyKey + suffix;
+                const data = localStorage.getItem(legacyKey);
+                // Jika data lama ada dan data baru belum ada, salin
+                if (data && !localStorage.getItem(newKey)) {
+                    localStorage.setItem(newKey, data);
+                }
+            });
+            localStorage.setItem(migratedFlag, 'true');
         }
     }
 

@@ -112,13 +112,8 @@ const Auth = {
     },
 
     logout() {
-        // Clear all LFMoney data from localStorage upon logout
+        // Hanya hapus sesi user saat ini, jangan hapus data transaksi mereka
         localStorage.removeItem(AUTH_KEYS.CURRENT_USER);
-        localStorage.removeItem('lexfinszmoney_transactions_v1');
-        localStorage.removeItem('lexfinszmoney_categories_v1');
-        localStorage.removeItem('lexfinszmoney_accounts_v1');
-        localStorage.removeItem('lexfinszmoney_goals_v1');
-        localStorage.removeItem('lexfinszmoney_bills_v1');
         
         window.location.href = 'index.html';
     },
