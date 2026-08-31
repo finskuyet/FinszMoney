@@ -38,8 +38,15 @@ const App = {
 
     async syncFromCloud() {
         this.updateConnectionStatus();
-        // Sync disabled on page refresh to prevent overwriting local un-pushed data.
-        // Data is already pulled from cloud during login in auth.js.
+        if (window.SupabaseSync && window.Auth) {
+            const user = window.Auth.getCurrentUser();
+            if (user) {
+                // Tarik data terbaru dari Supabase setiap kali web di-refresh
+                await window.SupabaseSync.pullDataToLocal(user.id);
+                // Render ulang tampilan agar data baru langsung muncul
+                this.switchTab(this.currentTab, false);
+            }
+        }
     },
 
     updateUserProfile(user) {
