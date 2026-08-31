@@ -1,7 +1,16 @@
 -- ============================================================
 -- LFMoney - Supabase Database Schema (LENGKAP)
--- Jalankan seluruh script ini di Supabase SQL Editor
+-- PERINGATAN: SCRIPT INI AKAN MENGHAPUS SEMUA TABEL LAMA.
+-- Jalankan seluruh script ini di Supabase SQL Editor untuk RESET.
 -- ============================================================
+
+-- Hapus tabel lama (agar bersih dan bisa dibuat ulang dengan kolom yang lengkap)
+DROP TABLE IF EXISTS public.bills CASCADE;
+DROP TABLE IF EXISTS public.goals CASCADE;
+DROP TABLE IF EXISTS public.accounts CASCADE;
+DROP TABLE IF EXISTS public.categories CASCADE;
+DROP TABLE IF EXISTS public.transactions CASCADE;
+DROP TABLE IF EXISTS public.users CASCADE;
 
 -- 1. Tabel Users / Profil
 CREATE TABLE IF NOT EXISTS public.users (

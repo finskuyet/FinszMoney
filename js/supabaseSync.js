@@ -224,20 +224,37 @@ window.SupabaseSync = {
         }
 
         try {
-            // Hapus data lama user di tabel ini, lalu insert ulang (full sync)
-            const { error: delErr } = await this.supabase
-                .from(tableName)
-                .delete()
-                .eq('user_id', userId);
-
-            if (delErr) console.warn(`⚠️ Gagal hapus data lama ${tableName}:`, delErr.message);
-
             if (dataArray && dataArray.length > 0) {
                 const snakeData = toSnakeCase(dataArray);
                 const formatted = snakeData.map(item => ({ ...item, user_id: userId }));
 
-                const { error: insErr } = await this.supabase.from(tableName).insert(formatted);
-                if (insErr) throw insErr;
+                // 1. UPSERT data (Insert or Update). Aman jika gagal (skema salah), tidak menghapus data lama.
+                const { error: upsertErr } = await this.supabase.from(tableName).upsert(formatted);
+                if (upsertErr) throw upsertErr;
+
+                // 2. HAPUS data di cloud yang sudah dihapus di lokal
+                const localIds = new Set(dataArray.map(item => item.id));
+                const { data: cloudData, error: fetchErr } = await this.supabase
+                    .from(tableName)
+                    .select('id')
+                    .eq('user_id', userId);
+                    
+                if (!fetchErr && cloudData) {
+                    const idsToDelete = cloudData
+                        .filter(row => !localIds.has(row.id))
+                        .map(row => row.id);
+                        
+                    if (idsToDelete.length > 0) {
+                        await this.supabase.from(tableName).delete().in('id', idsToDelete);
+                    }
+                }
+            } else {
+                // Jika data lokal kosong (semuanya dihapus user), hapus semua di cloud
+                const { error: delErr } = await this.supabase
+                    .from(tableName)
+                    .delete()
+                    .eq('user_id', userId);
+                if (delErr) throw delErr;
             }
 
             console.log(`✅ Sync ${tableName} berhasil (${dataArray?.length || 0} records).`);
