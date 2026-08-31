@@ -280,5 +280,37 @@ window.SupabaseSync = {
         } catch (error) {
             console.error(`❌ Gagal sync ${tableName}:`, error.message || error);
         }
+    },
+
+    // Realtime: Dengarkan perubahan di server secara live
+    setupRealtime() {
+        if (!this.supabase) return;
+        const userId = getLocalUserId();
+        if (!userId) return;
+
+        // Cegah pembuatan listener ganda
+        if (this.realtimeChannel) {
+            this.supabase.removeChannel(this.realtimeChannel);
+        }
+
+        const handleUpdate = async (payload) => {
+            console.log('🔄 Realtime: Perubahan terdeteksi dari perangkat lain', payload);
+            await this.pullDataToLocal(userId);
+            if (window.App && typeof window.App.switchTab === 'function') {
+                window.App.switchTab(window.App.currentTab, false);
+            }
+        };
+
+        this.realtimeChannel = this.supabase.channel('custom-all-channel')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions', filter: `user_id=eq.${userId}` }, handleUpdate)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'categories', filter: `user_id=eq.${userId}` }, handleUpdate)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'accounts', filter: `user_id=eq.${userId}` }, handleUpdate)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'goals', filter: `user_id=eq.${userId}` }, handleUpdate)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'bills', filter: `user_id=eq.${userId}` }, handleUpdate)
+            .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    console.log('⚡ Realtime aktif: Menunggu perubahan data...');
+                }
+            });
     }
 };

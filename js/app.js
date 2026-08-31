@@ -45,6 +45,8 @@ const App = {
                 await window.SupabaseSync.pullDataToLocal(user.id);
                 // Render ulang tampilan agar data baru langsung muncul
                 this.switchTab(this.currentTab, false);
+                // Aktifkan Realtime Listener agar tidak perlu refresh lagi kedepannya
+                window.SupabaseSync.setupRealtime();
             }
         }
     },

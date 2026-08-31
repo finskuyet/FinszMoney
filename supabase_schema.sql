@@ -144,3 +144,13 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================================
+-- REALTIME: Aktifkan fitur Realtime untuk semua tabel
+-- Agar web otomatis update tanpa perlu direfresh
+-- ============================================================
+ALTER PUBLICATION supabase_realtime ADD TABLE public.transactions;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.categories;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.accounts;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.goals;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.bills;
