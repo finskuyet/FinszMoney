@@ -11,6 +11,25 @@ const supabase = (supabaseUrl && supabaseKey && supabaseUrl !== 'https://your-pr
 // Log status koneksi Supabase saat load
 if (supabase) {
     console.log('✅ Supabase aktif:', supabaseUrl);
+    
+    // Dengarkan perubahan status autentikasi dari Supabase
+    supabase.auth.onAuthStateChange((event, session) => {
+        if ((event === 'SIGNED_OUT' || event === 'USER_DELETED') && window.Auth && window.Auth.getCurrentUser()) {
+            window.Auth.logout();
+        }
+    });
+
+    // Verifikasi sesi secara aktif dengan server saat aplikasi dimuat
+    setTimeout(async () => {
+        if (window.Auth && window.Auth.getCurrentUser()) {
+            const { data, error } = await supabase.auth.getUser();
+            if (error || !data.user) {
+                console.warn('⚠️ Sesi Supabase tidak valid atau kedaluwarsa. Melakukan logout otomatis.');
+                window.Auth.logout();
+            }
+        }
+    }, 500);
+
 } else {
     console.warn('⚠️ Supabase tidak aktif — sinkronisasi antar device tidak tersedia.');
 }
