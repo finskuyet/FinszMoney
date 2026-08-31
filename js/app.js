@@ -1528,8 +1528,10 @@ const App = {
             return;
         }
 
-        let csvContent = 'data:text/csv;charset=utf-8,';
-        csvContent += 'ID,Tanggal,Judul,Tipe,Kategori,Akun,Nominal,Catatan\n';
+        let csvContent = '\uFEFF'; // BOM (Byte Order Mark) agar Excel membaca karakter khusus (UTF-8) dengan benar
+        const delimiter = ';'; // Gunakan titik koma (;) agar otomatis rapi jadi tabel di Excel (Format Indonesia)
+        
+        csvContent += ['ID', 'Tanggal', 'Judul', 'Tipe', 'Kategori', 'Akun', 'Nominal', 'Catatan'].join(delimiter) + '\n';
 
         transactions.forEach(t => {
             const cat = categories.find(c => c.id === t.categoryId)?.name || '-';
@@ -1543,17 +1545,22 @@ const App = {
                 `"${acc}"`,
                 t.amount,
                 `"${(t.notes || '').replace(/"/g, '""')}"`
-            ].join(',');
+            ].join(delimiter);
             csvContent += row + '\n';
         });
 
-        const encodedUri = encodeURI(csvContent);
+        // Gunakan Blob agar file lebih aman, bisa menampung data besar, dan tidak error di beberapa browser
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
         const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
+        link.setAttribute('href', url);
         link.setAttribute('download', `LFMoney_Export_${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
+        
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
 
         this.showToast('Data transaksi berhasil diekspor ke CSV!', 'success');
     },
