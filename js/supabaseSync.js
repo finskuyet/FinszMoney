@@ -42,8 +42,8 @@ const toSnakeCase = (obj) => {
         // Kolom khusus yang perlu mapping manual
         if (key === 'notes') {
             newObj['note'] = obj[key];
-        } else if (key === 'calculatedBalance') {
-            // Skip kolom computed, tidak perlu disimpan ke DB
+        } else if (key === 'calculatedBalance' || key === 'createdAt' || key === 'created_at') {
+            // Skip kolom computed dan created_at agar database menggunakan nilai DEFAULT
         } else {
             const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
             newObj[snakeKey] = obj[key];
