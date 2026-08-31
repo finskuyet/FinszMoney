@@ -499,6 +499,14 @@ class DataStoreEngine {
         localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(DEFAULT_GOALS));
         localStorage.setItem(STORAGE_KEYS.BILLS, JSON.stringify(DEFAULT_BILLS));
         localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(getSampleTransactions()));
+
+        if (window.SupabaseSync) {
+            window.SupabaseSync.pushTableToCloud('categories', DEFAULT_CATEGORIES);
+            window.SupabaseSync.pushTableToCloud('accounts', DEFAULT_ACCOUNTS);
+            window.SupabaseSync.pushTableToCloud('goals', DEFAULT_GOALS);
+            window.SupabaseSync.pushTableToCloud('bills', DEFAULT_BILLS);
+            window.SupabaseSync.pushTableToCloud('transactions', getSampleTransactions());
+        }
     }
 
     restoreFromBackupJSON(jsonData) {
