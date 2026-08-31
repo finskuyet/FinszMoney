@@ -154,3 +154,14 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.categories;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.accounts;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.goals;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.bills;
+
+-- ============================================================
+-- FUNGSI OTOMATIS: Hapus akun pengguna (Dipanggil dari Client)
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.delete_user()
+RETURNS void AS $$
+BEGIN
+  -- Menghapus user dari auth.users otomatis akan memicu CASCADE ke tabel public (users, transactions, dll)
+  DELETE FROM auth.users WHERE id = auth.uid();
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

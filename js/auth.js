@@ -111,6 +111,42 @@ const Auth = {
         return { success: true, user: updatedSession };
     },
 
+    async deleteAccount() {
+        const currentUser = this.getCurrentUser();
+        if (!currentUser) return { success: false, message: 'Tidak ada sesi aktif.' };
+
+        // 1. Delete from Supabase if active
+        if (window.SupabaseSync && window.SupabaseSync.supabase) {
+            const res = await window.SupabaseSync.deleteAccount();
+            if (!res.success) {
+                return res; // if failed to delete from server, abort
+            }
+        }
+
+        // 2. Remove user from local users list
+        const users = this.getUsers();
+        const filteredUsers = users.filter(u => u.id !== currentUser.id);
+        this.saveUsers(filteredUsers);
+
+        // 3. Clear all local storage data for this user
+        const suffix = `_${currentUser.id}`;
+        const keysToRemove = [
+            'lexfinszmoney_transactions_v1' + suffix,
+            'lexfinszmoney_categories_v1' + suffix,
+            'lexfinszmoney_accounts_v1' + suffix,
+            'lexfinszmoney_goals_v1' + suffix,
+            'lexfinszmoney_bills_v1' + suffix,
+            'lexfinszmoney_settings_v1' + suffix,
+            'lexfinszmoney_migrated' + suffix
+        ];
+        
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+
+        // 4. Logout
+        this.logout();
+        return { success: true };
+    },
+
     logout() {
         // Hanya hapus sesi user saat ini, jangan hapus data transaksi mereka
         localStorage.removeItem(AUTH_KEYS.CURRENT_USER);

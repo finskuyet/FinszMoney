@@ -171,6 +171,20 @@ window.SupabaseSync = {
         }
     },
 
+    // Auth: Delete account via Supabase RPC
+    async deleteAccount() {
+        if (!this.supabase) return { success: false, message: 'Supabase belum dikonfigurasi' };
+        
+        try {
+            const { error } = await this.supabase.rpc('delete_user');
+            if (error) throw error;
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Supabase Delete Account Error:', error.message);
+            return { success: false, message: error.message };
+        }
+    },
+
     // Sync: Tarik data dari Cloud ke LocalStorage saat login / buka app
     async pullDataToLocal(userId) {
         if (!this.supabase || !userId) return;

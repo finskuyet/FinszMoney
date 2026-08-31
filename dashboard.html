@@ -703,6 +703,21 @@
                             <input type="file" id="import-json-file" accept=".json" class="hidden">
                         </div>
                     </div>
+
+                    <!-- Danger Zone Section -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-red-200/80 dark:border-red-900/50 shadow-sm space-y-4">
+                        <h3 class="font-bold text-base text-red-600 dark:text-red-400 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">warning</span>
+                            Zona Berbahaya
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Menghapus akun akan menghapus semua data transaksi, target tabungan, kategori, rekening, tagihan, dan pengaturan Anda secara permanen. Tindakan ini tidak dapat dibatalkan.</p>
+                        <div class="pt-2">
+                            <button onclick="App.confirmDeleteAccount()" class="px-5 py-2.5 bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white dark:bg-red-950/30 dark:border-red-800/60 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white font-semibold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">delete_forever</span>
+                                Hapus Akun & Semua Data
+                            </button>
+                        </div>
+                    </div>
                 </section>
             </main>
         </div>

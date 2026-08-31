@@ -1623,6 +1623,15 @@ const App = {
         }
     },
 
+    async confirmDeleteAccount() {
+        if (confirm('PERINGATAN: Anda yakin ingin menghapus akun dan semua data Anda secara permanen? Tindakan ini tidak dapat dibatalkan!')) {
+            const result = await Auth.deleteAccount();
+            if (!result.success) {
+                this.showToast(result.message || 'Gagal menghapus akun.', 'error');
+            }
+        }
+    },
+
     // ================= TOAST NOTIFICATIONS =================
     showToast(message, type = 'info') {
         const container = document.getElementById('toast-container');
