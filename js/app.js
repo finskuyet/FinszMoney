@@ -1615,9 +1615,9 @@ const App = {
     },
 
     resetToDemo() {
-        if (confirm('Apakah Anda ingin memulihkan data demo awal? Semua data saat ini akan digantikan data sampel.')) {
+        if (confirm('Apakah Anda yakin ingin MENGOSONGKAN semua data? Semua transaksi, rekening, dan pengaturan akan dihapus bersih (namun akun Anda akan tetap aktif).')) {
             DataStore.resetToDemoData();
-            this.showToast('Data demo berhasil dipulihkan!', 'success');
+            this.showToast('Semua data berhasil dikosongkan!', 'success');
             this.renderCurrentView();
             this.populateDropdowns();
         }
